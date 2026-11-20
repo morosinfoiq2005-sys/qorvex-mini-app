@@ -1,1 +1,209 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QORVEX</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101a20;color:#f4f0df;
+ font-family:Arial,sans-serif;
+ padding:18px 16px 95px;
+}
+:root{--gold:#f4c76b;--cyan:#65e6e5;--silver:#d9e3e5}
+header{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:900;letter-spacing:3px;color:var(--gold)}
+.tag{color:var(--cyan);font-size:11px;letter-spacing:2px}
+.card{
+ background:linear-gradient(145deg,#253a40,#14242b);
+ border:1px solid #52656a;border-radius:20px;
+ padding:20px;margin-top:17px;
+ box-shadow:0 8px 25px #0005;
+}
+.label{color:#9eb2b3;font-size:12px}
+.balance{font-size:36px;font-weight:bold;color:var(--gold);margin:12px 0}
+button{
+ border:0;border-radius:13px;padding:14px;
+ font-weight:bold;font-size:14px;cursor:pointer;
+}
+.gold{background:linear-gradient(110deg,#f7d98d,#c99539);color:#202020}
+.dark{background:#30474c;color:white;border:1px solid #61777a}
+.wide{width:100%;margin-top:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:#1a2d33;padding:15px;border-radius:15px}
+.stat strong{display:block;color:var(--cyan);font-size:19px;margin-top:8px}
+.mine{
+ text-align:center;padding:24px 12px;
+ background:radial-gradient(circle at center,#526d66,#1b3032 65%,#142329);
+}
+.pick{font-size:76px;margin:15px}
+h2{font-size:19px;margin:8px 0 15px}
+.timer{font-size:25px;color:var(--gold);font-weight:bold}
+nav{
+ position:fixed;bottom:0;left:0;width:100%;
+ background:#101d22;border-top:1px solid #43565a;
+ display:flex;justify-content:space-around;padding:12px 4px;
+}
+nav button{background:none;color:#c1cccc;padding:8px 5px;font-size:11px}
+nav button.active{color:var(--gold)}
+.page{display:none}
+.page.active{display:block}
+.item{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:15px 0;border-bottom:1px solid #34474a;gap:10px
+}
+.small{font-size:11px;color:#a8b8b8}
+</style>
+</head>
+<body>
+<header>
+ <div>
+  <div class="logo">QORVEX</div>
+  <div class="tag">MINE • EARN • EVOLVE</div>
+ </div>
+ <div>👑 <span style="color:var(--gold)">QVX</span></div>
+</header>
+
+<section id="home" class="page active">
+ <div class="card">
+  <div class="label">TOTAL BALANCE</div>
+  <div class="balance"><span id="balance">0.00</span> <small>QVX</small></div>
+  <div class="small">Your digital mining journey starts here.</div>
+ </div>
+ <div class="stats">
+  <div class="stat card">
+   <span class="label">Mining Power</span>
+   <strong>4 QVX / HR</strong>
+  </div>
+  <div class="stat card">
+   <span class="label">Referral Reward</span>
+   <strong>10 QVX</strong>
+  </div>
+ </div>
+ <div class="card mine">
+  <div class="tag">QORVEX CRYSTAL MINE</div>
+  <div class="pick">⛏️</div>
+  <h2>Mining Station</h2>
+  <div class="timer" id="timer">05:00:00</div>
+  <div class="small" id="mineStatus">Your mine is waiting.</div>
+  <button class="gold wide" id="mineBtn" onclick="toggleMine()">START MINING</button>
+ </div>
+ <div class="card">
+  <h2>Quick Access</h2>
+  <div class="stats">
+   <button class="dark" onclick="showPage('tasks')">🎯 Tasks</button>
+   <button class="dark" onclick="showPage('friends')">👥 Friends</button>
+   <button class="dark" onclick="showPage('wallet')">💎 Wallet</button>
+   <button class="dark" onclick="showPage('profile')">👤 Profile</button>
+  </div>
+ </div>
+</section>
+
+<section id="tasks" class="page">
+ <div class="card">
+  <h2>🎯 Tasks Center</h2>
+  <p class="small">Complete activities and earn QVX.</p>
+  <div class="item"><span>Telegram Channels</span><b>Tasks</b></div>
+  <div class="item"><span>Visit Websites</span><b>Tasks</b></div>
+  <div class="item"><span>Daily Challenges</span><b>Daily</b></div>
+  <div class="item"><span>Special Missions</span><b>New</b></div>
+  <div class="item"><span>Sponsored Tasks</span><b>Ads</b></div>
+  <p class="small">Tasks will become available when configured by the administrator.</p>
+ </div>
+</section>
+
+<section id="friends" class="page">
+ <div class="card">
+  <h2>👥 Invite Friends</h2>
+  <div class="balance">10 QVX</div>
+  <p class="small">Reward for each eligible new referral.</p>
+  <button class="gold wide" onclick="shareInvite()">INVITE FRIENDS</button>
+  <p class="small">Referral rewards require server-side verification.</p>
+ </div>
+</section>
+
+<section id="wallet" class="page">
+ <div class="card">
+  <h2>💎 Wallet</h2>
+  <div class="label">QVX INTERNAL BALANCE</div>
+  <div class="balance" id="walletBalance">0.00 QVX</div>
+  <div class="item"><span>TON Wallet</span><b>Coming Soon</b></div>
+  <button class="dark wide" disabled>WITHDRAWALS LOCKED</button>
+  <p class="small">TON withdrawals are not available yet.</p>
+ </div>
+</section>
+
+<section id="profile" class="page">
+ <div class="card">
+  <h2>👤 Profile</h2>
+  <div class="item"><span>Telegram User</span><b id="username">Guest</b></div>
+  <div class="item"><span>Mining Rate</span><b>4 QVX/HR</b></div>
+  <div class="item"><span>Project</span><b>QORVEX</b></div>
+ </div>
+</section>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
+ <button onclick="showPage('tasks',this)">🎯<br>Tasks</button>
+ <button onclick="showPage('friends',this)">👥<br>Friends</button>
+ <button onclick="showPage('wallet',this)">💎<br>Wallet</button>
+ <button onclick="showPage('profile',this)">👤<br>Profile</button>
+</nav>
+
+<script>
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();
+ const user=tg.initDataUnsafe?.user;
+ if(user)document.getElementById('username').textContent=
+ user.username?'@'+user.username:user.first_name;
+}
+
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ else document.querySelectorAll('nav button')[0].classList.toggle('active',id==='home');
+}
+
+function shareInvite(){
+ if(tg?.initDataUnsafe?.user?.id){
+  tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent('https://t.me/QorvexMiningBot?start='+tg.initDataUnsafe.user.id)+'&text='+encodeURIComponent('Join QORVEX!'));
+ }else alert('Open QORVEX inside Telegram to invite friends.');
+}
+
+let running=false,remaining=18000,interval=null;
+function displayTime(){
+ let h=Math.floor(remaining/3600);
+ let m=Math.floor((remaining%3600)/60);
+ let s=remaining%60;
+ document.getElementById('timer').textContent=
+ [h,m,s].map(x=>String(x).padStart(2,'0')).join(':');
+}
+function toggleMine(){
+ if(running)return;
+ if(remaining===0){
+  document.getElementById('mineStatus').textContent='Cycle completed. Claim and restart will be enabled after backend setup.';
+  return;
+ }
+ running=true;
+ document.getElementById('mineBtn').textContent='MINING ACTIVE';
+ document.getElementById('mineStatus').textContent='Mining cycle in progress.';
+ interval=setInterval(()=>{
+  remaining--;
+  displayTime();
+  if(remaining<=0){
+   clearInterval(interval);running=false;
+   document.getElementById('mineBtn').textContent='CYCLE COMPLETED';
+   document.getElementById('mineStatus').textContent='Cycle completed.';
+  }
+ },1000);
+}
+displayTime();
+</script>
+</body>
+</html>
